@@ -24,7 +24,9 @@ router.post("/login", async (req,res) => {
         if (!userData) {
             res.json("Login Failed")
         } else {
-            const samePassword = bcrypt.compareSync(req.body.password, userData.password)
+            console.log(req.body.password)
+            console.log(userData.password)
+            const samePassword = userData.checkPassword(req.body.password)
             if (!samePassword) {
                 res.json("Login Failed")
             } else {
@@ -36,10 +38,16 @@ router.post("/login", async (req,res) => {
             }
         }
     } catch (err) {
-        console.log(err)
-        console.log(err.message)
         res.status(500).json(err);
     }
 })
-
+router.post('/logout', (req, res) => {
+    if (req.session.loggedIn) {
+      req.session.destroy(() => {
+        res.status(204).end();
+      });
+    } else {
+      res.status(404).end();
+    }
+  });
 module.exports = router;

@@ -1,6 +1,5 @@
-const { Post, User, } = require('../models');
+const { Post, User, Comment } = require('../models');
 const router = require('express').Router();
-const withAuth = require('../utils/auth');
 
 router.get("/", async (req, res) => {
     try {
@@ -11,13 +10,23 @@ router.get("/", async (req, res) => {
                 attributes: ["username"],
             },
         ],
+        include: [
+            {
+                model: Comment,
+                attributes: ['id','text','post_id', 'user_id'],
+                include: {
+                    model: User,
+                    attributes: ['username']
+                }
+            }
+        ]
     });
 
     const posts = postData.map((post) =>
         post.get({ plain: true })
     );
 
-    res.render("homepage", { postData: posts });
+    res.render("homepage", { postData: posts, loggedIn: req.session.loggedIn});
     } catch (err) {
         res.status(500).json(err);
     }
@@ -25,22 +34,28 @@ router.get("/", async (req, res) => {
 
 router.get("/login", (req, res) => {
     try {
-        if (req.session.logged_in) {
+        if (req.session.loggedIn) {
             res.redirect('/dashboard');
           } else {
             res.render('login');
           }
     } catch (err) {
+        res.status(500).json(err);
 
     }
 })
 
 router.get("/signup", (req, res) => {
-    if (req.session.logged_in) {
-        res.redirect("/");
-      } else {
-        res.render("signup");
-      }
+    try{
+        if (req.session.loggedIn) {
+            res.redirect("/");
+          } else {
+            res.render("signup");
+          }
+    } catch (err) {
+        res.status(500).json(err);
+    }
+    
 });
 
 router.get("/dashboard", (req, res) => {
