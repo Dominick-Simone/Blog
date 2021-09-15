@@ -6,8 +6,8 @@ router.post("/", async (req, res) => {
     try {
         const userData = User.create(req.body)
         req.session.save(() => {
-            req.session.loggedIn = true
-            req.session.id = userData.id
+            req.session.loggedIn = true;
+            req.session.user_id = userData.id;
             res.redirect('/dashboard')
         })
     } catch (err) {
@@ -32,7 +32,7 @@ router.post("/login", async (req,res) => {
             } else {
                 req.session.save(() => {
                     req.session.loggedIn = true
-                    req.session.id = userData.id
+                    req.session.user_id = userData.id
                     res.redirect('/dashboard')
                 })
             }
@@ -41,7 +41,7 @@ router.post("/login", async (req,res) => {
         res.status(500).json(err);
     }
 })
-router.post('/logout', (req, res) => {
+router.get('/logout', (req, res) => {
     if (req.session.loggedIn) {
       req.session.destroy(() => {
         res.status(204).end();

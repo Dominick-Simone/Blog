@@ -20,11 +20,14 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link active rounded me-3 bg-primary" aria-current="page" href="/">Home</a>
-                    <a class="nav-link active rounded me-3 bg-primary" href="/dashboard">Dashboard</a>
-                    <a class="nav-link active rounded me-3 bg-primary" href="/login">Login</a>
-                    <a class="nav-link active rounded me-3 bg-primary" href="/logout" id="logout"
+                    <a class="nav-link active rounded me-3 bg-primary" aria-current="page" href="/" id="home">Home</a>
+                    <a class="nav-link active rounded me-3 bg-primary" href="/dashboard" id="dashboard">Dashboard</a>
+                    {{#if loggedIn}}
+                    <a class="nav-link active rounded me-3 bg-primary" href="/api/users/logout" id="logout"
                         type="button">Logout</a>
+                    {{else}}
+                    <a class="nav-link active rounded me-3 bg-primary" href="/login" id="login">Login</a>
+                    {{/if}}
                 </div>
             </div>
         </div>
@@ -33,8 +36,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
         crossorigin="anonymous"></script>
-    {{#if logged_in}}
-    <script src="../../public/logout.js"></script>
+    {{#if loggedIn}}
+    <script src="../../public/js/logout.js"></script>
     {{/if}}
 </body>
 
