@@ -36,8 +36,6 @@ router.post("/login", async (req, res) => {
             res.status(400).json("Login Failed")
             return;
         }
-        console.log(req.body.password)
-        console.log(userData.password)
         const validPassword = userData.checkPassword(req.body.password)
         if (!validPassword) {
             res.status(400).json("Login Failed")
