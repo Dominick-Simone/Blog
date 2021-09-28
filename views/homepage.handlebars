@@ -1,6 +1,6 @@
 <div class="container container-fluid mt-5">
     {{#each postData}}
-    <div class="card text-center">
+    <div class="card text-center mb-5">
         <div class="card-header">
             <p class="card-title">{{this.title}}</p>
         </div>
@@ -10,10 +10,7 @@
         <div class="card-footer text-muted">
             <p class="card-text">Posted by {{this.user.username}} on {{date_formatter this.createdAt}}</p>
         </div>
-        <div class="form-group">
-            <label for="comment">Comment:</label>
-            <textarea class="form-control" rows="5" id="comment"></textarea>
-        </div>
     </div>
     {{/each}}
 </div>
+

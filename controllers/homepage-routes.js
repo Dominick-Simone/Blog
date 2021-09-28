@@ -9,16 +9,6 @@ router.get("/", async (req, res) => {
                 model: User,
                 attributes: ["username"],
             },
-        ],
-        include: [
-            {
-                model: Comment,
-                attributes: ['id','text','post_id', 'user_id'],
-                include: {
-                    model: User,
-                    attributes: ['username']
-                }
-            }
         ]
     });
 
@@ -43,7 +33,7 @@ router.get("/login", (req, res) => {
         res.status(500).json(err);
 
     }
-})
+});
 
 router.get("/signup", (req, res) => {
     try{
@@ -54,12 +44,39 @@ router.get("/signup", (req, res) => {
           }
     } catch (err) {
         res.status(500).json(err);
-    }
-    
+    } 
 });
 
-router.get("/dashboard", (req, res) => {
-    res.render("dashboard")
-})
+router.get("/dashboard", async (req, res) => {
+    try{
+        const postData = await Post.findAll({
+            where: {
+                user_id: req.session.user_id
+            },
+            attributes: [
+                'id',
+                'title',
+                'text',
+                'createdAt'
+            ],
+            include: [
+                {
+                    model: User,
+                    attributes: ["username"],
+                }
+            ]
+        });
+        const posts = postData.map((post) =>
+        post.get({ plain: true })
+    );
+        if (req.session.loggedIn) {
+            res.render("dashboard", {postData: posts, loggedIn: req.session.loggedIn})
+          } else {
+            res.redirect("/login");
+        }
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
 
 module.exports = router;
