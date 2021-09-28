@@ -2,9 +2,9 @@ const router = require("express").Router()
 const { User } = require('../../models');
 const bcrypt = require('bcrypt');
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     try {
-        const users = User.findAll({
+        const users = await User.findAll({
             attributes: { exclude: 'password' }
         })
         res.json(users)
@@ -15,11 +15,11 @@ router.get('/', (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        const userData = User.create(req.body)
+        const userData = await User.create(req.body)
         req.session.save(() => {
             req.session.loggedIn = true;
             req.session.user_id = userData.id;
-            res.redirect('/dashboard')
+            res.redirect('/')
         })
     } catch (err) {
         res.status(500).json(err);
@@ -52,9 +52,9 @@ router.post("/login", async (req, res) => {
     }
 })
 
-router.post('/signup', (req, res) => {
+router.post('/signup', async (req, res) => {
     try {
-        const userData = User.create({
+        const userData = await User.create({
             username: req.body.username,
             password: req.body.password
         })
@@ -62,13 +62,13 @@ router.post('/signup', (req, res) => {
             res.status(400).json({ message: 'Sign Up Failed' });
             return;
         }
-
         req.session.save(() => {
             req.session.user_id = userData.id;
             req.session.username = userData.username;
             req.session.loggedIn = true;
+            res.redirect("/");
         });
-        res.json(userData)
+        
     } catch (err) {
         res.status(500).json(err);
     }

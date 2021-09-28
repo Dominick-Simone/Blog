@@ -6,7 +6,7 @@ async function signupForm(event) {
 
     if (username && password) {
         const response = await fetch('/api/user/signup', {
-            method: 'post',
+            method: 'POST',
             body: JSON.stringify({
                 username,  
                 password
@@ -18,8 +18,7 @@ async function signupForm(event) {
             console.log("Successfully created new user!");
             document.location.replace('/dashboard');
         } else {
-            alert(response.statusText);
-            console.log(response)
+            alert("Failed to create user");
         }
     }
 }
