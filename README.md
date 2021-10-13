@@ -23,4 +23,4 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Questions 
 * Github: https://github.com/Dominick-Simone
-* Email: domsimone123@gmail.com
+* Email: DomSimoneDev@gmail.com
